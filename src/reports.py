@@ -72,9 +72,9 @@ def create_report(
     report_info: ReportInfo,
     table_headers: TableHeaders,
     observations: list[Observation],
-    pdf_name: str = "report.pdf",
+    output_path: Path = Path("output", "report.pdf"),
 ):
-    # Create HTML content using Jinja2
+    # Setup
     env = Environment(loader=FileSystemLoader(template_directory))
 
     # Render HTML
@@ -91,8 +91,6 @@ def create_report(
     HTML(
         string=html,
         base_url=template_directory,
-    ).write_pdf(
-        Path("output", pdf_name).as_posix(),
-    )
+    ).write_pdf(output_path.as_posix())
 
-    print(f"PDF report generated as '{pdf_name}'")
+    print(f"PDF report generated in '{output_path.as_posix()}'")
