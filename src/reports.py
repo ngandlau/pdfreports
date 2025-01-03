@@ -1,4 +1,5 @@
-import base64
+from __future__ import annotations
+
 from datetime import date, time
 from enum import Enum
 from pathlib import Path
@@ -6,20 +7,6 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel, EmailStr
 from weasyprint import HTML
-
-
-class RowHeaders(Enum):
-    IMAGE = "Bilder"
-    DESCRIPTION = "Beschreibung"
-    ASSIGNEE = "Zuständig"
-    DUE_DATE = "Fälligkeit"
-
-
-class Row(BaseModel):
-    images: list[Path] = []
-    text_content: str = ""
-    assignee: str = ""
-    due_date: str = ""
 
 
 class Address(BaseModel):
@@ -38,13 +25,6 @@ class CompanyInfo(BaseModel):
     logo: Path | None = None
 
 
-class ProjectMember(BaseModel):
-    first_name: str
-    last_name: str
-    role: str | None = None
-    company: str | None = None
-
-
 class ProjectInfo(BaseModel):
     name: str
     address: Address
@@ -53,6 +33,13 @@ class ProjectInfo(BaseModel):
     start_date: date | None = None
     end_date: date | None = None
     members: list[ProjectMember] | None = None
+
+
+class ProjectMember(BaseModel):
+    first_name: str
+    last_name: str
+    role: str | None = None
+    company: str | None = None
 
 
 class ReportInfo(BaseModel):
@@ -64,45 +51,48 @@ class ReportInfo(BaseModel):
     end_time: time | None = None
 
 
-def image_to_base64(image_path: str) -> str:
-    """Convert image to base64 string"""
-    with open(image_path, "rb") as img_file:
-        encoded_string = base64.b64encode(img_file.read()).decode("utf-8")
-    return f"data:image/webp;base64,{encoded_string}"
+class TableHeaders(Enum):
+    IMAGE = "Bilder"
+    DESCRIPTION = "Beschreibung"
+    ASSIGNEE = "Zuständig"
+    DUE_DATE = "Fälligkeit"
+
+
+class Observation(BaseModel):
+    images: list[Path] = []
+    text_content: str = ""
+    assignee: str = ""
+    due_date: str = ""
 
 
 def create_report(
-    env_path,
-    rows,
-    company_info,
-    project_info,
-    report_info,
+    template_directory: Path,
+    company_info: CompanyInfo,
+    project_info: ProjectInfo,
+    report_info: ReportInfo,
+    table_headers: TableHeaders,
+    observations: list[Observation],
+    pdf_name: str = "report.pdf",
 ):
     # Create HTML content using Jinja2
-    env = Environment(loader=FileSystemLoader(env_path))
+    env = Environment(loader=FileSystemLoader(template_directory))
 
-    # Render main template
-    main_template = env.get_template("templates/report_template.html")
-    main_html = main_template.render(
-        observations=rows,
-        headers=RowHeaders,
+    # Render HTML
+    template = env.get_template("template.html")
+    html = template.render(
+        observations=observations,
+        headers=table_headers,
         company_info=company_info,
         project_info=project_info,
         report_info=report_info,
     )
 
-    # Render footer template
-    # footer_template = env.get_template("footer_template.html")
-    # footer_html = footer_template.render(company_info=company_info)
-
-    # Create PDF with footer
+    # Create PDF
     HTML(
-        string=main_html,
-        base_url=env_path,
+        string=html,
+        base_url=template_directory,
     ).write_pdf(
-        Path("output", "report.pdf").as_posix(),
-        # presentational_hints=True,
-        # footer_html=footer_html,
+        Path("output", pdf_name).as_posix(),
     )
 
-    print("PDF report generated as 'report.pdf'")
+    print(f"PDF report generated as '{pdf_name}'")

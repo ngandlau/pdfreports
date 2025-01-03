@@ -2,9 +2,9 @@
 
 A tool to generate professionally looking PDFs (see `output/report.pdf` for an example) with footers and headers like:
 
-![](examples/pdf-report-example.jpg)
+![](output/pdf-report-example.jpg)
 
-## Development
+## Setup
 
 Setup virtual environment:
 
@@ -13,5 +13,8 @@ poetry shell
 poetry install
 ```
 
-Execute `development.ipynb` notebook, which generates a report using example data.
+* Check out the `development.ipynb` notebook, in which we generate an example report
+* The html template must be named `template.html`
+* All images (e.g. logo) to be rendered in the PDF must be in the `templates` folder
+
 
