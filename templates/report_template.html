@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+    <style>
+
+@page {
+    margin-top: 1cm;
+    margin-bottom: 3cm;
+    margin-left: 1.5cm;
+    margin-right: 1cm;
+    size: A4;
+    @bottom-center {
+        content: element(footer);
+        width: 100%;
+        margin-bottom: 0.25cm;
+    }
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-bottom: 3cm;
+    font-size: 14px;
+}
+
+/* New header styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 32px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.company-info {
+    flex: 1;
+}
+
+.company-info h1 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.company-info p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    max-height: 80px;
+    width: auto;
+    display: block;
+}
+
+/* Existing table styles */
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table th,
+.report-table td {
+    border: 1px solid #eee;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.report-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.image-cell {
+    width: 220px;
+    max-width: 220px;
+    vertical-align: top;
+}
+
+.image-cell img {
+    width: 220px;
+    height: auto;
+    margin-bottom: 10px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Footer styles */
+footer {
+    position: running(footer);
+    width: 100%;
+    border-top: 1px solid #eee;
+    padding-top: 0.2cm;
+    font-size: 12px;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact-group {
+    flex: 0 0 auto;
+}
+
+.contact-group h3 {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+}
+
+.contact-group p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.contact-group a {
+    text-decoration: none;
+}
+
+.contact-group a:hover {
+    text-decoration: underline;
+}
+
+.report-table tr {
+    page-break-inside: avoid;
+}
+
+/* Update project info styles */
+.project-info {
+    margin-bottom: 32px;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.project-info-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+}
+
+.project-details h2 {
+    font-size: 24px;
+    margin: 0 0 15px 0;
+    color: #1a1a1a;
+}
+
+.project-details-grid {
+    /* Remove flexbox and gap */
+}
+
+.detail-item {
+    margin-bottom: 10px;  /* Space between sections */
+    font-size: 14px;
+}
+
+.detail-label {
+    text-transform: uppercase;
+    color: #666;
+}
+
+.detail-value {
+    display: block;
+    color: #1a1a1a;
+    /* font-weight: 500; */
+}
+
+.project-team {
+    background-color: #ffffff;
+    padding: 20px;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.05); */
+}
+
+.project-team h3 {
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    color: #1a1a1a;
+}
+
+.project-team-member {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.project-team-member:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Last detail item shouldn't have bottom margin */
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.member-name {
+    display: block;
+    margin: 0;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.member-role {
+    color: #666;
+    text-transform: uppercase;
+}
+
+.member-company {
+    color: #666;
+}
+    </style>
+</head>
+<body>
+    <!-- Move footer to the top -->
+    <footer>
+        <div class="contact-info">
+            <!-- Left column -->
+            <div class="contact-group">
+                {{ company_info.name }}<br>
+                {{ company_info.address.street }}<br>
+                {{ company_info.address.postal_code }} {{ company_info.address.city }}
+            </div>
+            <!-- Right column -->
+            <div class="contact-group">
+                {% if company_info.phone %}
+                Tel: {{ company_info.phone }}<br>
+                {% endif %}
+                {% if company_info.email %}
+                <a href="mailto:{{ company_info.email }}">{{ company_info.email }}</a><br>
+                {% endif %}
+                {% if company_info.website %}
+                <a href="{{ company_info.website }}">{{ company_info.website }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </footer>
+
+    <!-- Rest of the content -->
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ company_info.name }}</h1>
+            <p>{{ company_info.department }}</p>
+            <p>{{ company_info.address.street }}</p>
+            <p>{{ company_info.address.postal_code }} {{ company_info.address.city }}</p>
+        </div>
+        <div class="logo">
+            <img src="{{ company_info.logo }}">
+        </div>
+    </div>
+
+    <!-- Project info section -->
+    <div class="project-info">
+        <div class="project-info-grid">
+            <div class="project-details">
+                <h2>{{ project_info.name }}</h2>
+                <div class="project-details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Adresse</div>
+                        <div class="detail-value">{{ project_info.address.street }}, {{ project_info.address.postal_code }} {{ project_info.address.city }}</div>
+                    </div>
+                    {% if project_info.number %}
+                    <div class="detail-item">
+                        <div class="detail-label">Projekt Nr.</div>
+                        <div class="detail-value">{{ project_info.number }}</div>
+                    </div>
+                    {% endif %}
+                    {% if project_info.start_date and project_info.end_date %}
+                    <div class="detail-item">
+                        <div class="detail-label">Zeitraum</div>
+                        <div class="detail-value">{{ project_info.start_date.strftime('%d.%m.%Y') }} bis {{ project_info.end_date.strftime('%d.%m.%Y') }}</div>
+                    </div>
+                    {% endif %}
+                    {% if project_info.email %}
+                    <div class="detail-item">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">{{ project_info.email }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if project_info.members %}
+            <div class="project-team">
+                <h3>Projektleiter</h3>
+                {% for member in project_info.members %}
+                <div class="project-team-member">
+                    <div class="member-name">{{ member.first_name }} {{ member.last_name }}</div>
+                    {% if member.role %}
+                    <div class="member-role">{{ member.role }}</div>
+                    {% endif %}
+                    {% if member.company %}
+                    <div class="member-company">{{ member.company }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Report info section -->
+    <div style="margin-top: 24px; margin-bottom: 24px;">
+        <h2 style="margin-bottom: 16px;">{{ report_info.title }}</h2>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="detail-item">
+                <div class="detail-label">Datum</div>
+                <div class="detail-value">{{ report_info.date.strftime('%d.%m.%Y') }}</div>
+            </div>
+            {% if report_info.start_time and report_info.end_time %}
+            <div class="detail-item">
+                <div class="detail-label">Zeitraum</div>
+                <div class="detail-value">{{ report_info.start_time.strftime('%H:%M') }} bis {{ report_info.end_time.strftime('%H:%M') }}</div>
+            </div>
+            {% endif %}
+            {% if report_info.weather %}
+            <div class="detail-item">
+                <div class="detail-label">Wetter</div>
+                <div class="detail-value">{{ report_info.weather }}</div>
+            </div>
+            {% endif %}
+            {% if report_info.description %}
+            <div class="detail-item">
+                <div class="detail-label">Zusätzliche Informationen</div>
+                <div class="detail-value">
+                    {{ report_info.description }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>{{ headers.IMAGE.value }}</th>
+                <th>{{ headers.DESCRIPTION.value }}</th>
+                <th>{{ headers.ASSIGNEE.value }}</th>
+                <th>{{ headers.DUE_DATE.value }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in observations %}
+            <tr>
+                <td class="image-cell">
+                    {% for image in row.images %}
+                    <img src="{{ image }}">
+                    {% endfor %}
+                </td>
+                <td>{{ row.text_content }}</td>
+                <td>{{ row.assignee }}</td>
+                <td>{{ row.due_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

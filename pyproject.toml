@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pdf reports"
+version = "0.1.0"
+description = "Generating professional PDF reports with headers and footers."
+authors = ["ngandlau <28842354+ngandlau@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+weasyprint = "^63.1"
+pydantic = "^2.10.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
