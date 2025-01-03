@@ -65,8 +65,9 @@ class Observation(BaseModel):
     due_date: str = ""
 
 
-def create_report(
+async def create_report(
     template_directory: Path,
+    images_directory: Path,
     company_info: CompanyInfo,
     project_info: ProjectInfo,
     report_info: ReportInfo,
@@ -90,7 +91,7 @@ def create_report(
     # Create PDF
     HTML(
         string=html,
-        base_url=template_directory,
+        base_url=images_directory,
     ).write_pdf(output_path.as_posix())
 
     print(f"PDF report generated in '{output_path.as_posix()}'")
