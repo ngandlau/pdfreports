@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, model_validator
 from weasyprint import HTML
 
 
@@ -15,24 +15,45 @@ class Address(BaseModel):
     city: str
 
 
+def convert_empty_str_to_none(data: dict, fields: list[str]) -> dict:
+    for field in fields:
+        if field in data and data[field] == "":
+            data[field] = None
+    return data
+
+
 class CompanyInfo(BaseModel):
     name: str
-    department: str | None = None
     address: Address
+    department: str | None = None
     phone: str | None = None
-    email: EmailStr | None = None
+    email: str | None = None
     website: str | None = None
     logo: Path | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def empty_str_to_none(cls, data):
+        return convert_empty_str_to_none(
+            data, ["department", "phone", "email", "website"]
+        )
 
 
 class ProjectInfo(BaseModel):
     name: str
     address: Address | None = None
     number: str | None = None  # an optional identifier (e.g. an ID like `137`)
-    email: EmailStr | None = None
+    email: str | None = None
     start_date: str | None = None
     end_date: str | None = None
     members: list[ProjectMember] | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def empty_str_to_none(cls, data):
+        return convert_empty_str_to_none(
+            data, ["number", "email", "start_date", "end_date"]
+        )
 
 
 class ProjectMember(BaseModel):
@@ -40,6 +61,11 @@ class ProjectMember(BaseModel):
     last_name: str
     role: str | None = None
     company: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def empty_str_to_none(cls, data):
+        return convert_empty_str_to_none(data, ["role", "company"])
 
 
 class ReportInfo(BaseModel):
@@ -49,6 +75,13 @@ class ReportInfo(BaseModel):
     description: str | None = None
     start_time: str | None = None
     end_time: str | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def empty_str_to_none(cls, data):
+        return convert_empty_str_to_none(
+            data, ["weather", "description", "start_time", "end_time"]
+        )
 
 
 class TableHeaders(Enum):
