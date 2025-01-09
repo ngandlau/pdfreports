@@ -27,7 +27,7 @@ class CompanyInfo(BaseModel):
 
 class ProjectInfo(BaseModel):
     name: str
-    address: Address
+    address: Address | None = None
     number: str | None = None  # an optional identifier (e.g. an ID like `137`)
     email: EmailStr | None = None
     start_date: date | None = None
