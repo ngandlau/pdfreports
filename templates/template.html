@@ -223,10 +223,9 @@ footer {
     </style>
 </head>
 <body>
-    <!-- Move footer to the top -->
+    
     <footer>
         <div class="contact-info">
-            <!-- Left column -->
             <div class="contact-group">
                 {{ company_info.name }}<br>
                 {{ company_info.address.street }}<br>
@@ -247,7 +246,6 @@ footer {
         </div>
     </footer>
 
-    <!-- Rest of the content -->
     <div class="header">
         <div class="company-info">
             <h1>{{ company_info.name }}</h1>
@@ -260,16 +258,18 @@ footer {
         </div>
     </div>
 
-    <!-- Project info section -->
+    <!-- Project info -->
     <div class="project-info">
         <div class="project-info-grid">
             <div class="project-details">
                 <h2>{{ project_info.name }}</h2>
                 <div class="project-details-grid">
+                    {% if project_info.address %}
                     <div class="detail-item">
                         <div class="detail-label">Adresse</div>
                         <div class="detail-value">{{ project_info.address.street }}, {{ project_info.address.postal_code }} {{ project_info.address.city }}</div>
                     </div>
+                    {% endif %}
                     {% if project_info.number %}
                     <div class="detail-item">
                         <div class="detail-label">Projekt Nr.</div>
