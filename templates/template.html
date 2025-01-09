@@ -279,7 +279,7 @@ footer {
                     {% if project_info.start_date and project_info.end_date %}
                     <div class="detail-item">
                         <div class="detail-label">Zeitraum</div>
-                        <div class="detail-value">{{ project_info.start_date.strftime('%d.%m.%Y') }} bis {{ project_info.end_date.strftime('%d.%m.%Y') }}</div>
+                        <div class="detail-value">{{ project_info.start_date }} bis {{ project_info.end_date }}</div>
                     </div>
                     {% endif %}
                     {% if project_info.email %}
@@ -320,7 +320,7 @@ footer {
             {% if report_info.start_time and report_info.end_time %}
             <div class="detail-item">
                 <div class="detail-label">Zeitraum</div>
-                <div class="detail-value">{{ report_info.start_time.strftime('%H:%M') }} bis {{ report_info.end_time.strftime('%H:%M') }}</div>
+                <div class="detail-value">{{ report_info.start_time }} bis {{ report_info.end_time }}</div>
             </div>
             {% endif %}
             {% if report_info.weather %}

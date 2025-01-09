@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date, time
+from datetime import date
 from enum import Enum
 from pathlib import Path
 
@@ -30,8 +30,8 @@ class ProjectInfo(BaseModel):
     address: Address | None = None
     number: str | None = None  # an optional identifier (e.g. an ID like `137`)
     email: EmailStr | None = None
-    start_date: date | None = None
-    end_date: date | None = None
+    start_date: str | None = None
+    end_date: str | None = None
     members: list[ProjectMember] | None = None
 
 
@@ -47,8 +47,8 @@ class ReportInfo(BaseModel):
     date: date
     weather: str | None = None
     description: str | None = None
-    start_time: time | None = None
-    end_time: time | None = None
+    start_time: str | None = None
+    end_time: str | None = None
 
 
 class TableHeaders(Enum):
