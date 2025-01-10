@@ -222,6 +222,7 @@ footer {
 </head>
 <body>
     
+    {% if company_info %}
     <footer>
         <div class="contact-info">
             <div class="contact-group">
@@ -243,7 +244,9 @@ footer {
             </div>
         </div>
     </footer>
+    {% endif %}
 
+    {% if company_info %}
     <div class="header">
         <div class="company-info">
             <h1>{{ company_info.name }}</h1>
@@ -257,7 +260,7 @@ footer {
             <img src="{{ company_info.logo }}">
         </div>
     </div>
-
+    {% endif %}
     <!-- Project info -->
     <div class="project-info">
         <div class="project-info-grid">
