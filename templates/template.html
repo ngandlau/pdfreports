@@ -247,7 +247,9 @@ footer {
     <div class="header">
         <div class="company-info">
             <h1>{{ company_info.name }}</h1>
+            {% if company_info.department %}
             <p>{{ company_info.department }}</p>
+            {% endif %}
             <p>{{ company_info.address.street }}</p>
             <p>{{ company_info.address.postal_code }} {{ company_info.address.city }}</p>
         </div>
